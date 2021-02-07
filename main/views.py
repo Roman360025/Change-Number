@@ -13,16 +13,20 @@ def index(request):
     error = ''
     number = "Здесь будет обработанное число"
     if request.method == 'POST':
-        form = NumberForm(request.POST) # Форма, полученная только что от пользователя
-        form_base = Number.objects.get(id=1) # Данные, доступные в БД
-        if form.is_valid() :
+        form = NumberForm(request.POST)  # Форма, полученная только что от пользователя
+        form_base = Number.objects.all()  # Данные, доступные в БД
+        if form.is_valid():
             if not form_base:
                 form.save()
+                number = form.cleaned_data.get("number")
+                form = NumberForm()
                 context = {
                     'form': form,
+                    'number': number+1
                 }
 
                 return render(request, 'main/index.html', context)
+            form_base = Number.objects.all()[0]
             number = form_base.number
             if number == form.cleaned_data.get("number"):
                 error = 'ОШИБКА! Такое число уже вводилось'
@@ -36,7 +40,6 @@ def index(request):
                 form_base.number = form.cleaned_data.get("number")
                 form_base.save()
                 number = form.cleaned_data.get("number") + 1
-
 
     form = NumberForm()
     context = {

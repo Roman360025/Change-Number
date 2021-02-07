@@ -9,6 +9,7 @@ class NumberForm(ModelForm):
         widgets = {'number': NumberInput(attrs={
             'class': 'form-control',
             'placeholder': 'Введите число',
+            'min': "0",
             'id': 'number'
         }),
         }
