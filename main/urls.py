@@ -17,5 +17,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index)
+    path('', views.index),
+    path('number/', views.NumberView.as_view()),
+    path('change/', views.NumberChange.as_view())
 ]

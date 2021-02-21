@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from .forms import NumberForm
-from .models import Number
 import logging
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import Number
+from .serializers import NumberChangeSerializer
+from .serializers import NumberListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -48,3 +53,36 @@ def index(request):
         'number': number
     }
     return render(request, 'main/index.html', context)
+
+
+class NumberView(APIView):
+    '''Вывод числа'''
+    def get(self, request):
+        numbers = Number.objects.all()
+        serializer = NumberListSerializer(numbers, many=True)
+        return Response(serializer.data)
+
+class NumberChange(APIView):
+    '''Изменение числа'''
+    def post(self, request):
+        number_api = NumberChangeSerializer(data=request.data)
+        if number_api.is_valid():
+            form_base = Number.objects.all()  # Данные, доступные в БД
+            if not form_base:
+                number_api.save()
+                return Response(status=201)
+            form_base = Number.objects.all()[0]
+            number = form_base.number
+            if number == request.data["number"]:
+                error = 'ОШИБКА! Такое число уже вводилось'
+                number = "Ошибка"
+                logger.error('ОШИБКА! Такое число уже вводилось')
+            elif (request.data["number"] - number) == -1:
+                error = 'ОШИБКА! Поступившее число на единицу меньше обработанного числа'
+                number = "Ошибка"
+                logger.error('ОШИБКА! Поступившее число на единицу меньше обработанного числа')
+            else:
+                form_base.number = request.data["number"]
+                form_base.save()
+                number = request.data["number"] + 1
+            return Response(status=201)
