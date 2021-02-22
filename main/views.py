@@ -70,19 +70,20 @@ class NumberChange(APIView):
             form_base = Number.objects.all()  # Данные, доступные в БД
             if not form_base:
                 number_api.save()
-                return Response(status=201)
+                return Response({"number": request.data["number"]+1})
             form_base = Number.objects.all()[0]
             number = form_base.number
             if number == request.data["number"]:
                 error = 'ОШИБКА! Такое число уже вводилось'
                 number = "Ошибка"
                 logger.error('ОШИБКА! Такое число уже вводилось')
+                return Response({"error": 422})
             elif (request.data["number"] - number) == -1:
                 error = 'ОШИБКА! Поступившее число на единицу меньше обработанного числа'
                 number = "Ошибка"
                 logger.error('ОШИБКА! Поступившее число на единицу меньше обработанного числа')
+                return Response({"error": 422})
             else:
                 form_base.number = request.data["number"]
                 form_base.save()
-                number = request.data["number"] + 1
-            return Response(status=201)
+                return Response({"number": request.data["number"]+1})
