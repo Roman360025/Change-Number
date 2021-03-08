@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+    - pg_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=number
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_HOST=db
+  django:
+    container_name: dn_number
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    command: bash -c "python /usr/src/dn_rest/manage.py migrate --noinput &&
+              python /usr/src/dn_rest/manage.py runserver 0.0.0.0:8000"
+    volumes:
+    - .:/usr/src/dn_rest
+    ports:
+    - 8000:8000
+#    env_file:
+#      - ./achievement2/.env
+    depends_on:
+      - db
+volumes:
+  pg_data:
