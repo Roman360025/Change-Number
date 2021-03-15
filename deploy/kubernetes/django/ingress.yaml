@@ -11,6 +11,14 @@ spec:
         backend:
           serviceName: django-service
           servicePort: 8000
+      - path: /admin/
+        backend:
+            serviceName: django-service
+            servicePort: 8000
+      - path: /static/
+        backend:
+            serviceName: django-service
+            servicePort: 8000
       - path: /
         backend:
           serviceName: django-service
