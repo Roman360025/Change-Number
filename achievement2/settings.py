@@ -56,10 +56,10 @@ LOGGING = {
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g=up8p(lxjz(c1x#=*6tn!kool4(f$qln8+bps+*-ia)gg2gwe'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False)
+DEBUG = env('DEBUG', default=False)
 
 # ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 ALLOWED_HOSTS = ["*"]
@@ -123,13 +123,13 @@ WSGI_APPLICATION = 'achievement2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.{}'.format(
-            os.getenv('DATABASE_ENGINE', 'sqlite3')
+            env('DATABASE_ENGINE', default='postgresql_psycopg2')
         ),
-        'NAME': os.getenv('DATABASE_NAME', 'number'),
-        'USER': os.getenv('DATABASE_USERNAME', 'postgres'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 1234),
-        'HOST': os.getenv('DATABASE_HOST', '127.0.0.1'),
-        'PORT': os.getenv('DATABASE_PORT', 5432),
+        'NAME': env('DATABASE_NAME', default='number'),
+        'USER': env('DATABASE_USER', default='postgres'),
+        'PASSWORD': env('DATABASE_PASS', default=1234),
+        'HOST': env('DATABASE_HOST', default='127.0.0.1'),
+        'PORT': env('DATABASE_PORT', default=5432),
     }
 }
 
