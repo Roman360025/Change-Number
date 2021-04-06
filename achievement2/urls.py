@@ -18,7 +18,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls')),
+    # path('', include('main.urls')),
     # path('api-numb/', include('rest_framework.urls')),
     path('api/v1/main/', include('main.urls')),
+
+#     Creating the health check endpoints
+    path(r'', include('health_check.urls'))
 ]

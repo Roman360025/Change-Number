@@ -12,11 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
-import environ
 
 # Инициализация переменных окружения
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,20 +53,13 @@ LOGGING = {
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'g=up8p(lxjz(c1x#=*6tn!kool4(f$qln8+bps+*-ia)gg2gwe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', default=False)
+DEBUG = True
 
 # ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 ALLOWED_HOSTS = ["*"]
-
-
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8080",
-    "http://localhost:8081",
-    "http://localhost:8000"
-]
 
 
 # Application definition
@@ -83,7 +73,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'main'
+    'main',
+
+#     Running Health Checks
+    'health_check',
+    'health_check.db',
 ]
 
 MIDDLEWARE = [
@@ -122,14 +116,12 @@ WSGI_APPLICATION = 'achievement2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.{}'.format(
-            env('DATABASE_ENGINE', default='postgresql_psycopg2')
-        ),
-        'NAME': env('DATABASE_NAME', default='number'),
-        'USER': env('DATABASE_USER', default='postgres'),
-        'PASSWORD': env('DATABASE_PASS', default=1234),
-        'HOST': env('DATABASE_HOST', default='127.0.0.1'),
-        'PORT': env('DATABASE_PORT', default=5432),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'number',
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT', 5432)
     }
 }
 
