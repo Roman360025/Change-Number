@@ -23,5 +23,5 @@ urlpatterns = [
     path('api/v1/main/', include('main.urls')),
 
 #     Creating the health check endpoints
-    path(r'', include('health_check.urls'))
+#     path(r'', include('health_check.urls'))
 ]

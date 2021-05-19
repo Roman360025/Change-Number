@@ -1,28 +1,29 @@
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: django-migrations
-spec:
-  template:
-    spec:
-      containers:
-        - name: django
-          image: number:part_4
-          command: ['python', 'manage.py', 'migrate']
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-credentials
-                  key: user
-
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-credentials
-                  key: password
-
-            - name: POSTGRES_HOST
-              value: postgres-service
-      restartPolicy: Never
-  backoffLimit: 5
+#apiVersion: batch/v1
+#kind: Job
+#metadata:
+#  name: django-migrations
+#spec:
+#  template:
+#    spec:
+#      containers:
+#        - name: django
+#          image: number
+##          imagePullPolicy: IfNotPresent
+#          command: ['python', 'manage.py', 'migrate']
+#          env:
+#            - name: POSTGRES_USER
+#              valueFrom:
+#                secretKeyRef:
+#                  name: postgres-credentials
+#                  key: user
+#
+#            - name: POSTGRES_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: postgres-credentials
+#                  key: password
+#
+#            - name: POSTGRES_HOST
+#              value: postgres-service
+#      restartPolicy: Never
+#  backoffLimit: 5

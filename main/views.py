@@ -1,3 +1,4 @@
+import psycopg2
 from django.shortcuts import render
 from .forms import NumberForm
 import logging
@@ -7,6 +8,8 @@ from rest_framework.views import APIView
 from .models import Number
 from .serializers import NumberChangeSerializer
 from .serializers import NumberListSerializer
+import os
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,12 +57,41 @@ def index(request):
     }
     return render(request, 'main/index.html', context)
 
+def create_tables():
+    """ create tables in the PostgreSQL database"""
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        conn = psycopg2.connect(
+            database="number", user=os.getenv('POSTGRES_USER'), password=os.getenv('POSTGRES_PASSWORD'),
+            host=os.getenv('POSTGRES_HOST'), port=os.getenv('POSTGRES_PORT', 5432))
+        cur = conn.cursor()
+        # create table one by one
+        cur.execute("""
+        CREATE TABLE main_number (
+        id SERIAL PRIMARY KEY,
+        number INTEGER
+        )
+        """)
+
+        # close communication with the PostgreSQL database server
+        cur.close()
+        # commit the changes
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
 
 class NumberView(APIView):
     '''Вывод числа'''
     def get(self, request):
         numbers = Number.objects.all()
-        serializer = NumberListSerializer(numbers, many=True)
+        try:
+            serializer = NumberListSerializer(numbers, many=True)
+        except:
+            create_tables()
         return Response(serializer.data)
 
 class NumberChange(APIView):
