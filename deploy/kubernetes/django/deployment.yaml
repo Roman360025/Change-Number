@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
         - name: django
-#          image: roman360025/change
-          image: number_4
+          image: roman360025/change_number
+#          image: number_11:latest
           command: ['/bin/bash', 'run.sh'] # runs migrations and starts the server
-          imagePullPolicy: IfNotPresent
+#          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           env:
