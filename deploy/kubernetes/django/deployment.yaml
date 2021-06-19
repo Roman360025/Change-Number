@@ -36,4 +36,7 @@ spec:
                   key: password
 
             - name: POSTGRES_HOST
-              value: postgres-service
+              value: 10.101.89.138
+#            - name: POSTGRES_HOST
+#              value: postgres-service1
+      nodeName: node-16

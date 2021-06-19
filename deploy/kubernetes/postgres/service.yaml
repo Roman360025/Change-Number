@@ -1,11 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgres-service
+  name: postgres-service1
 spec:
   selector:
     app: postgres-container
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 5432
       targetPort: 5432
+
